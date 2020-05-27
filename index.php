@@ -1,3 +1,27 @@
+<?php
+if (isset($_POST['submit'])) {
+    $file = $_FILES['file'];
+
+    $fileName = $_FILES['file']['name'];
+    $fileTmpName = $_FILES['file']['name'];
+    $fileError = $_FILES['file']['error'];
+    $fileType = $_FILES['file']['type'];
+
+    $fileExt = explode('.', $fileName);
+    $fileActualExt = strtolower(end($fileExt));
+
+    $allowed = array('jpg', 'jpeg', 'png', 'pdf');
+
+    if (in_array($fileActualExt, $allowed)) {
+        $fileNameNew = uniqid('', true).".".$fileActualExt;
+                $fileDestination = 'uploads/' . $fileNameNew;
+                move_uploaded_file($fileTmpName, $fileDestination);
+                header("Location: index.php?uploadsuccess");
+         } else {
+            echo "nono no, pictures only, please";
+    }
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -64,18 +88,11 @@ width: 235px;
 
 <br><br>
 
-<form action="" method="POST">
-
-<button class="button"><a href="http://localhost/BIT_PHP_demo/sprint1/browser/">Back</a></button>
-<br><br>
-<button class="button">Choose file</a></button><br>
-<button class="button">Upload file</a></button><br>
-<form action="/action_page.php">
-  <input type="link" id="newName" name="lname" placeholder="Name of new directory">
-  <input type="submit">
+<form action="upload.php" method="POST" enctype="multipart/form-data">
+    <input type="file" name="file">
+    <button type="submit" name="submit">upload</button>
 </form> 
 
 
 </body>
 </html>
-
